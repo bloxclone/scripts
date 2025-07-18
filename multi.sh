@@ -5,7 +5,7 @@ echo "Enter one or more combos [API_TOKEN]/[ORG_SLUG], one per line. Press Ctrl+
 # Read all lines into an array
 mapfile -t combos
 
-AUTH_KEY="tskey-auth-kzy1u6QWEw11CNTRL-3jp4mbwamD6zSghHB3fkD6c5L8yC6JZtS"
+AUTH_KEY="tskey-auth-kAQHLWxwvo11CNTRL-aET3R9hHVPNFR74fE5HWPNdoYURyRhW9Q"
 
 # get_tailscale_auth_key() {
 #   local OAUTH_TOKEN="tskey-api-kWHuFCpgE811CNTRL-hTSQhCsVSyhtt4ufY8yTyhSARYvrrevDd"
