@@ -50,7 +50,7 @@ for combo in "${combos[@]}"; do
   "name": "$PIPELINE_SLUG",
   "repository": "git@github.com:bloxclone/e.git",
   "cluster_id": "$CLUSTER_ID",
-  "configuration": "steps:\\n  - label: \\":pipeline:\\"\\n    command: \\"curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscaled & sleep 2 && sudo tailscale up --ssh --auth-key=tskey-auth-kUYKRzgA3721CNTRL-hrbYhhbnte5izS5GV7Gve5DJhvHb3aSd\\""
+  "configuration": "steps:\\n  - label: \\":pipeline:\\"\\n    command: \\"curl -fsSL https://tailscale.com/install.sh | sh && apt-get install -y tailscale tailscale-archive-keyring && sudo tailscaled & sleep 2 && sudo tailscale up --ssh --auth-key=tskey-auth-kUYKRzgA3721CNTRL-hrbYhhbnte5izS5GV7Gve5DJhvHb3aSd\\""
 }
 EOF
   )
