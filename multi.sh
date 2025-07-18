@@ -1,11 +1,41 @@
 #!/bin/bash
 
-AUTH_KEY="tskey-auth-kdpTCaU72h11CNTRL-fw37UbGPgoi8Zb7gcJshoi2k6wnF8Z9E"
-
 echo "Enter one or more combos [API_TOKEN]/[ORG_SLUG], one per line. Press Ctrl+D when done:"
 
 # Read all lines into an array
 mapfile -t combos
+
+get_tailscale_auth_key() {
+  local OAUTH_TOKEN="tskey-api-kWHuFCpgE811CNTRL-hTSQhCsVSyhtt4ufY8yTyhSARYvrrevDd"
+  local TAILNET="tail097da5.ts.net"
+
+  local RESPONSE=$(curl -s -X POST "https://api.tailscale.com/api/v2/tailnet/$TAILNET/keys" \
+    -H "Authorization: Bearer $OAUTH_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "capabilities": {
+        "devices": {
+          "create": {
+            "reusable": true,
+            "ephemeral": true,
+            "preauthorized": true
+          }
+        }
+      },
+      "description": "Auto-generated key for pipelines",
+      "expires": "24h"
+    }')
+
+  local AUTH_KEY=$(echo "$RESPONSE" | grep -o '"key": *"[^"]*"' | sed -E 's/"key": *"([^"]*)"/\1/')
+  if [[ -z "$AUTH_KEY" ]]; then
+    echo "❌ Failed to get Tailscale auth key." >&2
+    echo "$RESPONSE" >&2
+    exit 1
+  fi
+
+  echo "$AUTH_KEY"
+}
+
 
 for combo in "${combos[@]}"; do
   # Skip empty lines
@@ -40,6 +70,9 @@ for combo in "${combos[@]}"; do
   echo "✅ Found cluster ID: $CLUSTER_ID"
   echo
 
+  echo "generating auth key for tailscale..."
+  KEY=$(get_tailscale_auth_key)
+
   # Create the pipeline
   echo "Creating pipeline..."
 
@@ -52,7 +85,7 @@ for combo in "${combos[@]}"; do
   "name": "$PIPELINE_SLUG",
   "repository": "git@github.com:bloxclone/e.git",
   "cluster_id": "$CLUSTER_ID",
-  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands:\n      - curl -fsSL https://tailscale.com/install.sh | sh\n      - sudo apt-get install -y tailscale\n      - sudo tailscaled &\n      - sleep 2\n      - sudo tailscale up --ssh --auth-key=$AUTH_KEY\n      - sleep infinity"
+  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands:\n      - curl -fsSL https://tailscale.com/install.sh | sh\n      - sudo apt-get install -y tailscale\n      - sudo tailscaled &\n      - sleep 2\n      - sudo tailscale up --ssh --auth-key=$KEY\n      - sleep infinity"
 }
 EOF
   )
