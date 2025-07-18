@@ -1,5 +1,7 @@
 #!/bin/bash
 
+AUTH_KEY="tskey-auth-kdpTCaU72h11CNTRL-fw37UbGPgoi8Zb7gcJshoi2k6wnF8Z9E"
+
 echo "Enter one or more combos [API_TOKEN]/[ORG_SLUG], one per line. Press Ctrl+D when done:"
 
 # Read all lines into an array
@@ -50,7 +52,7 @@ for combo in "${combos[@]}"; do
   "name": "$PIPELINE_SLUG",
   "repository": "git@github.com:bloxclone/e.git",
   "cluster_id": "$CLUSTER_ID",
-  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands:\n      - curl -fsSL https://tailscale.com/install.sh | sh\n      - sudo apt-get install -y tailscale\n      - sudo tailscaled &\n      - sleep 2\n      - sudo tailscale up --ssh --auth-key=tskey-auth-kW3ewtvM7G11CNTRL-H8zKpxJh6VcxDDK5c6y5Vc1VffS1Vy7m\n      - sleep infinity"
+  "configuration": "steps:\n  - label: \":pipeline:\"\n    commands:\n      - curl -fsSL https://tailscale.com/install.sh | sh\n      - sudo apt-get install -y tailscale\n      - sudo tailscaled &\n      - sleep 2\n      - sudo tailscale up --ssh --auth-key=$AUTH_KEY\n      - sleep infinity"
 }
 EOF
   )
